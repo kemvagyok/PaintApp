@@ -1,0 +1,625 @@
+openapi: 3.0.4
+info:
+  title: Art institue of Chicago
+  description: |-
+    An API for an aggregator of Art Institute of Chicago public data
+  termsOfService: https://www.artic.edu/terms
+  contact:
+    email: engineering@artic.edu
+
+  version: 1.13
+externalDocs:
+  description: Find out more about Swagger
+  url: https://api.artic.edu/
+servers:
+  - url: https://api.artic.edu/api/v1
+tags:
+  - name: Artworks
+    description: Everything about artworks
+    externalDocs:
+      description: Documentation
+      url: https://api.artic.edu/docs/#introduction
+  - name: Artists
+    description: Everything about artists
+    externalDocs:
+      description: Documentation
+      url: https://api.artic.edu/docs/#introduction
+  - name: Images
+    description: Everything about images
+    externalDocs:
+      description: Documentation
+      url: https://api.artic.edu/docs/#introduction
+paths:
+  /artworks:
+    get:
+      tags:
+        - Artworks
+      summary: Get works.
+      description: Returns artworks.
+      operationId: pageArtwork
+      parameters:
+        - name: page
+          in: query
+          description: ID of artwork to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: fields
+          in: query
+          description: Fields of artwork to return
+          required: false
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworksResponse'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: ""
+                
+  /artworks/search:
+    get:
+      tags:
+        - Artworks
+      summary: Find artworks by keywords.
+      description: Returns artworks.
+      operationId: q
+      parameters:
+        - name: q
+          in: query
+          description: Keywords of gaven artworks to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworksSearchResponse'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: ""
+  /artworks/{id}:
+    get:
+      tags:
+        - Artworks
+      summary: Find the artwork by id.
+      description: Return an artwork by id.
+      operationId: idArtwork
+      parameters:
+        - name: id
+          in: path
+          description: Id of given artworks to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtworkIdResponse'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: ""
+  
+  /agents:
+    get:
+      tags:
+        - Artists
+      summary: Get agents.
+      description: Returns agents.
+      operationId: pageAgent
+      parameters:
+        - name: page
+          in: query
+          description: ID of agent to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: fields
+          in: query
+          description: Fields of artwork to return
+          required: false
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentsResponse'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: ""
+                
+  /agents/{id}:
+    get:
+      tags:
+       - Artists
+      summary: Find an artist by ID.
+      description: Returns an artist.
+      operationId: idAgent
+      parameters:
+        - name: id
+          in: path
+          description: ID of artwork to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentIdResponse'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: "#/"
+  /agents/search:
+    get:
+      tags:
+        - Artists
+      summary: Find artists by keywords.
+      description: Returns artists.
+      operationId: query
+      parameters:
+        - name: q
+          in: query
+          description: Keywords of given artists to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/AgentsSearchResponse'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+                
+  /{identifier}/full/1686,/0/default.jpg:
+    get:
+      tags:
+       - Images
+      summary: Find an image by UUID.
+      description: Returns an image.
+      servers:
+        - url: https://www.artic.edu/iiif/2/
+      operationId: identifier
+      parameters:
+        - name: identifier
+          in: path
+          description: UUID of artwork to return
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            image/jpg:
+              schema:
+                $ref: '#/'
+        default:
+          description:  error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    AgentIdResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentIdData'
+        info:
+          type: object
+          properties:
+            license_text:
+              type: string
+            license_links:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+        config:
+          type: object
+          properties:
+            iiif_url:
+              type: string
+            website_url:
+              type: string
+      
+    AgentsSearchResponse:
+      type: object
+      properties:
+        preference:
+          type: string
+          nullable: true
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 188
+            limit:
+              type: integer
+              example: 10
+            offset:
+              type: integer
+              example: 0
+            total_pages:
+              type: integer
+              example: 19
+            current_page:
+              type: integer
+              example: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentsSearchingData'
+        info:
+          type: object
+          properties:
+            license_text:
+              type: string
+            license_links:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+        config:
+          type: object
+          properties:
+            iiif_url:
+              type: string
+            website_url:
+              type: string
+                
+                
+    AgentsSearchingData:
+      type: object
+      properties:
+        _score:
+          type: number
+          format: float
+          example: 39.652016
+        id:
+          type: integer
+          example: 58779
+        api_model:
+          type: string
+          example: agents
+        api_link:
+          type: string
+          example: https://api.artic.edu/api/v1/agents/58779
+        title:
+          type: string
+          example: Pál Szinyei Merse
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-04-27T08:00:38-05:00"
+            
+    AgentIdData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 31956
+        api_model:
+          type: string
+          example: agents
+        api_link:
+          type: string
+          example: https://api.artic.edu/api/v1/agents/31956
+        title:
+          type: string
+          example: Samuel A. Marx
+        sort_title:
+          type: string
+          example: Marx, Samuel A.
+        alt_titles:
+          type: array
+          items:
+            type: string
+          example:
+            - Samuel Abraham Marx
+        is_artist:
+          type: boolean
+          example: true
+        birth_date:
+          type: integer
+          example: 1885
+        death_date:
+          type: integer
+          example: 1964
+        description:
+          type: string
+          nullable: true
+          example: null
+        ulan_id:
+          type: string
+          nullable: true
+          example: null
+        suggest_autocomplete_all:
+          $ref: '#/components/schemas/SuggestAutocompleteAll'
+        source_updated_at:
+          type: string
+          format: date-time
+          example: "2025-04-25T15:01:59-05:00"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-04-25T15:05:15-05:00"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-04-27T15:49:23-05:00"
+  
+    SuggestAutocompleteAll:
+      type: object
+      properties:
+        input:
+          type: array
+          items:
+            type: string
+          example:
+            - Samuel A. Marx
+            - Marx, Samuel A.
+            - Samuel Abraham Marx
+        weight:
+          type: integer
+          example: 2
+        contexts:
+          type: object
+          properties:
+            groupings:
+              type: array
+              items:
+                type: string
+              example:
+                - title
+  
+
+    ArtworksSearchResponse:
+      type: object
+      properties:
+        preference:
+          type: string
+          nullable: true
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 188
+            limit:
+              type: integer
+              example: 10
+            offset:
+              type: integer
+              example: 0
+            total_pages:
+              type: integer
+              example: 19
+            current_page:
+              type: integer
+              example: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtworkSearchingData'
+        info:
+          type: object
+          properties:
+            license_text:
+              type: string
+            license_links:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+        config:
+          type: object
+          properties:
+            iiif_url:
+              type: string
+            website_url:
+              type: string
+  
+    ArtworksResponse:
+      type: object
+      properties:
+        preference:
+          type: string
+          nullable: true
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+              example: 188
+            limit:
+              type: integer
+              example: 10
+            offset:
+              type: integer
+              example: 0
+            total_pages:
+              type: integer
+              example: 19
+            current_page:
+              type: integer
+              example: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtworkIdData'
+        info:
+          type: object
+          properties:
+            license_text:
+              type: string
+            license_links:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+        config:
+          type: object
+          properties:
+            iiif_url:
+              type: string
+            website_url:
+              type: string
+              
+    ArtworkIdResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtworkIdData'
+        info:
+          type: object
+          properties:
+            license_text:
+              type: string
+            license_links:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+        config:
+          type: object
+          properties:
+            iiif_url:
+              type: string
+            website_url:
+              type: string
+              
+
+    ArtworkSearchingData:
+      type: object
+      properties:
+        _score:
+          type: number
+          format: float
+          example: 135.6878
+        id:
+          type: integer
+          example: 656
+        api_model:
+          type: string
+          example: artworks
+        api_link:
+          type: string
+          example: https://api.artic.edu/api/v1/artworks/656
+        is_boosted:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Lion (One of a Pair, South Pedestal)
+        thumbnail:
+          $ref: '#/components/schemas/Thumbnail'
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-04-26T23:24:39-05:00"
+          
+    ArtworkIdData:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 656
+        api_model:
+          type: string
+          example: artworks
+        api_link:
+          type: string
+          example: https://api.artic.edu/api/v1/artworks/656
+        is_boosted:
+          type: boolean
+          example: false
+        title:
+          type: string
+          example: Lion (One of a Pair, South Pedestal)
+        thumbnail:
+          $ref: '#/components/schemas/Thumbnail'
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-04-26T23:24:39-05:00"
+        
+    Thumbnail:
+      type: object
+      properties:
+        lqip:
+          type: string
+          description: Low Quality Image Placeholder (base64 encoded image)
+        width:
+          type: integer
+          example: 8430
+        height:
+          type: integer
+          example: 5620
+        alt_text:
+          type: string
+          example: A bronze lion, deep green and muscular, looks out in the distance from its pedestal in front of the Art Institute of Chicago.
+
+
+
+  
+  

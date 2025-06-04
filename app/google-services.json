@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "246776685681",
+    "project_id": "paintapp-f68d8",
+    "storage_bucket": "paintapp-f68d8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246776685681:android:cdc94b7342450287c2a7d0",
+        "android_client_info": {
+          "package_name": "com.example.painting"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlz_HIEhJDhQX9WiYHjRM4YwaQWMzz1gw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

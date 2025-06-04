@@ -1,0 +1,34 @@
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Házi feladat specifikáció\r\n\r\nInformációk [itt](https://viaumb02.github.io/laborok/android/A01/)\r\n\r\n## Mobilszoftver Laboratórium\r\n### 2025 tavaszi félév\r\n### Sági Benedek - (ECSGGY)\r\n### Laborvezető: Sík Dávid\r\n\r\n## Festmény alkalmazás\r\n\r\n<img src=\"./assets/icon.webp\" width=\"160\">\r\n\r\n\r\n## Bemutatás\r\n\r\n'Art Institute of Chicago' intézmény rajongóinak megvannak a saját festményei, de szeretnének még látni/felfedezni/keresni újabbakat, és azokat elmenteni emlékezettül, hogy megnézhesse személyesen az intézményben.\r\nAz alkalmazásban a festmények kizárólag az Chicagói művészeti intézményből vannak.\r\n## Főbb funkciók\r\n### 1. Festmények keresése\r\n- A. Cím \r\n- B. Alkotó neve\r\n- C. Egyéb (pl. a cicákat tartalmazó festményeket keresel, akkor cica kulcsszó segítségével kikereshető)\r\nUgyanakkor nem kötelező mindegyiket kitölteni: Ha mindegyik üresen hagyja, akkor az adott (lokálisan) elmentett kulcsszavak közül véletlenszerűen választott szavakkal való keresés történik.\r\n-  A keresés után a festményeket felsorolják (részlet nélkül)\r\n\r\n### 2. Adott festmény részletezése\r\n#### Festmény: Cím, szerző, tartalom, kedvencként elmentése lokálisan\r\nTehát az egyszerűség kedvéért kizárólag a festményeknél el lehet menteni kedvencként, meg eltávolítani a kedvencek közül.\r\n(A szerzők felsorolását kihagyom az egyszerűség kedvéért, de hogyha mégis kevés ez, akkor utólag ezt adom hozzá.)\r\n\r\nUsacase, és usestory (\"Festmény nézegetée\")\r\n<img src=\"./assets/BMELaborMobilUseCaseUseStory.png\" width=\"320\">\r\n\r\n## Képernyőtervek\r\n1.\r\n<img src=\"./assets/Main.png\" width=\"320\">\r\n2.\r\n<img src=\"./assets/Paint_Details.png\" width=\"320\">\r\n3.\r\n<img src=\"./assets/Paint_searching.png\" width=\"320\">\r\n\r\n## Architektúra: MVVM + (Clean Architektúra)\r\nA Model-View-ViewModel egy általános architektúra, amiben van a nézet, üzleti logika, és az adat réteg, és azok \"rétegesen\", szeperáltan el vannak különítve.\r\nA MVVM a Feaute-kben látható legjobban. \r\nViszonylag az egész struktúra leginkább a Clean Archiktetúrán alapul, mivel vannak a DI, és a datasource mappa.\r\n### Nézet:\r\n- Navigation\r\n- ui, és almappái\r\n\r\n### Üzleti logika:\r\n- feature, és almappái\r\n\r\n### Adat:\r\n- Data: Dao, DataSource, di (Hilt megoldás), entities\r\n- Network\r\n\r\nAzért választottam ezt, mert jelenleg ez a legjobb megoldás erre az arcitektúrálisan átfogó alkalmazás fejlesztésére,\r\nvalamint a Jetpack Compose-fejlesztésénl a ViewModel megoldás segítségével könnyebben teszi a készítését.\r\n\r\n### Commit\r\nKépernyő:\r\n<img src=\"./assets/commits.png\" width=\"320\">\r\n\r\n### Github Actions\r\n\r\n<img src=\"./assets/githubaction.png width=\"320\">\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision 7d91584b9c81cf6d5ebb1cd504b899c5d8e9f6a8)
++++ b/README.md	(date 1745707760115)
+@@ -64,4 +64,4 @@
+ 
+ ### Github Actions
+ 
+-<img src="./assets/githubaction.png width="320">
++<img src="./assets/githubaction.png" width="320">
+Index: .github/workflows/runningApp.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>name: Build\r\non:\r\n  pull_request:\r\n  push:\r\n    branches:\r\n      - main\r\njobs:\r\n  build:\r\n    runs-on: ubuntu-latest\r\n    steps:\r\n      - name: Checkout the code\r\n        uses: actions/checkout@v2\r\n      - name: Build the app\r\n        run:  echo \"Most nem merem buildizni a minusz pontok miatt\"\r\n        #|\r\n       #   chmod +x gradlew\r\n       #   ./gradlew build\r\n
+===================================================================
+diff --git a/.github/workflows/runningApp.yml b/.github/workflows/runningApp.yml
+--- a/.github/workflows/runningApp.yml	(revision 7d91584b9c81cf6d5ebb1cd504b899c5d8e9f6a8)
++++ b/.github/workflows/runningApp.yml	(date 1745707760114)
+@@ -12,6 +12,6 @@
+         uses: actions/checkout@v2
+       - name: Build the app
+         run:  echo "Most nem merem buildizni a minusz pontok miatt"
+-        #|
+-       #   chmod +x gradlew
+-       #   ./gradlew build
++        
++          chmod +x gradlew
++         ./gradlew build
