@@ -1,7 +1,5 @@
-## Mobilszoftver Laboratórium
-### 2025 tavaszi félév
-### Sági Benedek - (ECSGGY)
-### Laborvezető: Sík Dávid
+## My university homework
+### Sági Benedek
 
 ## Painting app
 
