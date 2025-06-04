@@ -1,7 +1,4 @@
-## My university homework
-### Sági Benedek
-
-## Painting app
+## Painting app (homework)
 
 <img src="./assets/icon.webp" width="160">
 
