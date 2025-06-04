@@ -1,7 +1,3 @@
-# Házi feladat specifikáció
-
-Információk [itt](https://viaumb02.github.io/laborok/android/A01/)
-
 ## Mobilszoftver Laboratórium
 ### 2025 tavaszi félév
 ### Sági Benedek - (ECSGGY)
