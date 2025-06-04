@@ -3,166 +3,176 @@
 ### Sági Benedek - (ECSGGY)
 ### Laborvezető: Sík Dávid
 
-## Festmény alkalmazás
+## Painting app
 
 <img src="./assets/icon.webp" width="160">
 
 
-## Bemutatás (1.labor)
+# Presentation (Lab 1)
 
-'Art Institute of Chicago' intézmény rajongóinak megvannak a saját festményei, de szeretnének még látni/felfedezni/keresni újabbakat, és azokat elmenteni emlékezettül, hogy megnézhesse személyesen az intézményben.
-Az alkalmazásban a festmények kizárólag az Chicagói művészeti intézményből vannak.
-## Főbb funkciók
-### 1. Festmények keresése
-- A. Cím 
-- B. Alkotó neve
-- C. Egyéb (pl. a cicákat tartalmazó festményeket keresel, akkor cica kulcsszó segítségével kikereshető)
-Ugyanakkor nem kötelező mindegyiket kitölteni: Ha mindegyik üresen hagyja, akkor az adott (lokálisan) elmentett kulcsszavak közül véletlenszerűen választott szavakkal való keresés történik.
--  A keresés után a festményeket felsorolják (részlet nélkül)
+Fans of the **Art Institute of Chicago** have their favorite paintings, but they would like to discover, search for, and save more artworks to remember and view them in person at the institute.  
+The application exclusively features paintings from the Art Institute of Chicago.
 
-### 2. Adott festmény részletezése
-#### Festmény: Cím, szerző, tartalom, kedvencként elmentése lokálisan
-Tehát az egyszerűség kedvéért kizárólag a festményeknél el lehet menteni kedvencként, meg eltávolítani a kedvencek közül.
-(A szerzők felsorolását kihagyom az egyszerűség kedvéért, de hogyha mégis kevés ez, akkor utólag ezt adom hozzá.)
+## Main Features
 
-Usecase, és usestory ("Festmény nézegetés")
+### 1. Search for Paintings
+- **A. By Title**  
+- **B. By Artist Name**  
+- **C. By Keywords** (e.g., if you're searching for paintings with cats, you can enter "cat" as a keyword)  
 
-<img src="./assets/BMELaborMobilUseCaseUseStory.png" width="320">
+Filling in these fields is optional:  
+If left empty, the app will perform a search using randomly selected locally saved keywords.
 
-## Képernyőtervek
-1.
-<img src="./assets/Main.png" width="320">
-2.
-<img src="./assets/Paint_Details.png" width="320">
-3.
-<img src="./assets/Paint_searching.png" width="320">
+After the search, paintings are listed (without detailed view).
 
-## Architektúra: MVVM (2.labor)
-A Model-View-ViewModel egy általános architektúra, amiben van a nézet, üzleti logika, és az adat réteg, és azok "rétegesen", szeperáltan el vannak különítve.
-A MVVM a Feaute-kben látható legjobban. 
-Viszonylag az egész struktúra leginkább a Clean Archiktetúrán alapul, mivel vannak a DI, és a datasource mappa.
-### Nézet:
-- Navigation
-- ui, és almappái
+### 2. View Painting Details
+- Painting details include: **Title, Author, Description**, and an option to **save as a Favorite** locally.  
+- Only paintings can be saved or removed from favorites.
+- (Listing of authors is omitted for simplicity, but can be added later if needed.)
 
-### Üzleti logika:
-- feature, és almappái
+## Use Case and User Story ("Browsing Paintings")
 
-### Adat:
-- Data: Dao, DataSource, di (Hilt megoldás), entities
-- Network
+![Use Case](./assets/BMELaborMobilUseCaseUseStory.png)
 
-Azért választottam ezt, mert jelenleg ez a legjobb megoldás erre az arcitektúrálisan átfogó alkalmazás fejlesztésére,
-valamint a Jetpack Compose-fejlesztésénl a ViewModel megoldás segítségével könnyebben teszi a készítését.
+## Screen Designs
 
-## Commit:
-<img src="./assets/commits.png" width="320">
+1. ![Main Screen](./assets/Main.png)  
+2. ![Painting Details](./assets/Paint_Details.png)  
+3. ![Search Screen](./assets/Paint_searching.png)
 
-## Github Actions:
-<img src="./assets/githubaction.png" width="320">
+---
 
-## Service (API), és az ORM elkészítése (Room könyvtárral) (3.labor)
+# Architecture: MVVM (Lab 2)
 
-### Service osztályai
+The **Model-View-ViewModel** architecture separates the view, business logic, and data layers into a layered and modular structure.  
+It is largely based on **Clean Architecture**, featuring modules for **Dependency Injection (DI)** and **data sources**.
 
-#### Modellek (Felelősség: Adott entitás leírása, plusz itt is meg van határozva, hogy melyik tulajdonságokat tartsuk meg a JSON-ból):
-- ArtistApi: A művész adott attribútumait leíró osztály
-- ArtworkApi: A mű adott attribútumait leíró osztály
-- Pagination: Az API-tól lekérdezett JSON egyik részét, Pagination, mely leírja, hogy mennyi entitást, melyik oldalon, hány oldal van összesen, és mi a következő entitástnak az URL-je, amivel lehet folytatni.
-- ApiResponse: Mivel az API a következőből így épül fel: pagination: {}, data: [{},{},{}], ezért még egy osztályt kellett látrehozni.
+### View Layer
+- `Navigation`
+- `ui` and its subfolders
 
-#### API (Felelősség: API-tól való lehívás adott path-hal, query-jel):
-- ArtistService: A művészekhez kapcsolódó adatok lekérése az API-tól.
-- ArtworkService: A műalkotásokhoz kapcsolódó adatok lekérése az API-tól.
-- ImageService: Egy adott műhöz kapcsolódó kép  lekérése az API-tól.
+### Business Logic
+- `feature` and its subfolders
 
-### ORM osztályai
+### Data Layer
+- `data`: Contains `Dao`, `DataSource`, `di` (Hilt), and `entities`
+- `network`
 
-#### Entity (Felelősség: A lokális adatbázishoz kapcsolódó entitások definiálása)
-- Artist: Az attribútumai azonosak az ArtistApi-ével, csak ORM-nak megfelelően
-- Artwork: Az attribútumai azonosak az ArtworkApi-ével, csak ORM-nak megfelelően
-- ImageEntity: Eredetileg az Artwork-ba akartam beégetni, csakhogy nehezebb karbantartható lenne a kód hosszútávon (hipotizésen)
-#### DAO (Felelősség: Az adatbázisműveletek (insert, delete, query) definiálása)
-- ArtistDao: A művészekhez kapcsolódó adatbázisműveleteket végzi el, például beszúrás, lekérdezés.
-- ArtworkDao: A műalkotásokhoz kapcsolódó adatbázisműveleteket végzi el, például új mű mentése, kedvenc művek lekérdezése.
-- ImageDao: A képekhez kapcsolódó adatbázisműveleteket kezeli, például egy műhöz tartozó kép mentése, lekérdezése.
+> I chose this architecture because it's currently the most robust solution for a well-structured application.  
+> Also, in Jetpack Compose development, the ViewModel approach simplifies building and managing UI.
 
-### Repositories (Felelősség: Beköti a DAO, Service adott műveleteit)
-- ArtistRepository: Interfész, mely definiálja az művészekkel kapcsolatos elérhető műveleteket.
-- ArtistRepositryImpl: Megvalósítja az ArtistRepository interfészt. Összeköti az ArtistService-t és az ArtistDao-t, hogy mind hálózati, mind lokális adatforrásból tudjon adatot kezelni.
-- ArtworkRepositry:  Interfész, amely definiálja a műalkotásokkal kapcsolatos elérhető műveleteket
-- ArtworkRepositoryImpl:  Megvalósítja az ArtworkRepository interfészt. A hálózatról (ArtworkService) szerzett adatokat kezeli, illetve a lokális adatbázisba (ArtworkDao) történő mentést intézi.
-- ImageRepository:  Interfész, amely a képek letöltésével és tárolásával kapcsolatos műveleteket írja le.
-- ImageRepositoryImpl: Megvalósítja az ImageRepository interfészt, kezeli az ImageService API hívásokat és az ImageDao adatbázisműveleteit.
+---
 
-### DI
-- NetworkModule: Felelős a hálózati kapcsolatokhoz szükséges függőségek biztosításáért, mint például Retrofit példány, ArtistService, ArtworkService, ImageService inicializálása.
-- PersistenceModule: Felelős a lokális adatbázishoz kapcsolódó függőségek biztosításáért, például Room adatbázis példány létrehozása, ArtistDao, ArtworkDao, ImageDao biztosítása a Hilt számára.
+## Commit Overview
 
-### Firebase
+![Commits](./assets/commits.png)
 
-#### Események
-<img src="./assets/events.png" width="320">
+## GitHub Actions
 
-#### Crashlytics
-<img src="./assets/crashlytics.png" width="320">
+![GitHub Actions](./assets/githubaction.png)
 
-### Test units (strategy)
-- Lokális: Az Android-os kontextus nélkül leteszteltem az Artwork, Artist, és ImageEntity repositoriek Dao-s, és Service-s viselkedéseit, vagyis nem volt benne sem adatbázis, sem API-lehívás.
-- Instrumentális: 
+---
 
-#### Lokális:
+# Service (API) and ORM with Room (Lab 3)
 
-1. Lokális Unit Tesztek (Local Unit Tests)
-- Cél:Az ArtworkRepository, ArtistRepository és ImageRepository komponensek működésének tesztelése Android környezet nélkül.
+## Service Classes
 
-- Technológia: JUnit4, MockK, kotlinx.coroutines.test
+### Models (Purpose: Describes entities and maps selected JSON fields)
+- **`ArtistApi`**: Represents attributes of an artist
+- **`ArtworkApi`**: Represents attributes of an artwork
+- **`Pagination`**: Describes API pagination info (total items, current page, total pages, next URL)
+- **`ApiResponse`**: Wraps API response structure: `pagination: {}, data: [{}, {}, {}]`
 
-- Mockolt elemek: API (Service) és adatbázis (DAO) rétegek.
+### API Interfaces (Purpose: Fetch data from the API using paths/queries)
+- **`ArtistService`**: Fetches artist-related data
+- **`ArtworkService`**: Fetches artwork-related data
+- **`ImageService`**: Fetches image data for artworks
 
-- Fókusz:
+---
 
-  - API válaszok kezelése
-  - Adatbázis műveletek (insert, delete, query)
-  - Kulcsszavas keresés működése
+## ORM Classes
 
-- Előny: Gyors, nem szükséges hozzá eszköz vagy emulator, jól izolálható hibák.
+### Entities (Purpose: Define local database entities)
+- **`Artist`**: Same attributes as `ArtistApi`, ORM-compatible
+- **`Artwork`**: Same attributes as `ArtworkApi`, ORM-compatible
+- **`ImageEntity`**: Separated from `Artwork` for easier long-term maintainability
 
-#### Instrumentális
+### DAO (Purpose: Define database operations like insert, delete, query)
+- **`ArtistDao`**: Handles artist database operations
+- **`ArtworkDao`**: Handles artwork database operations (e.g., save, get favorites)
+- **`ImageDao`**: Handles image database operations for artworks
 
-- Cél: A valós Android környezetben működő komponensek (pl. Retrofit alapú Service osztályok és Room adatbázis) viselkedésének ellenőrzése.
+---
 
-- Technológia: AndroidJUnit4, Room, Retrofit, Gson
+## Repositories (Purpose: Connect DAO and Service layers)
 
-- Fókusz:
+- **`ArtistRepository`**: Interface for artist-related operations
+- **`ArtistRepositoryImpl`**: Implements the interface using `ArtistService` and `ArtistDao`
+- **`ArtworkRepository`**: Interface for artwork-related operations
+- **`ArtworkRepositoryImpl`**: Implements the interface using `ArtworkService` and `ArtworkDao`
+- **`ImageRepository`**: Interface for image operations
+- **`ImageRepositoryImpl`**: Implements image handling using `ImageService` and `ImageDao`
 
-    - API hívások valós válaszai (ArtworkService, ArtistService)
+---
 
-    - Room adatbázis integrációs tesztjei
+## Dependency Injection (DI)
 
-- Előny: Biztosítja, hogy az alkalmazás komponensei megfelelően integrálódnak az Android rendszerbe.
+- **`NetworkModule`**: Provides dependencies like Retrofit, `ArtistService`, `ArtworkService`, `ImageService`
+- **`PersistenceModule`**: Provides Room database, DAOs (`ArtistDao`, `ArtworkDao`, `ImageDao`) for Hilt
 
+---
 
-#### Tesztlefedettség:
+# Firebase Integration
 
-##### Lokális tesztek (12 db):
+### Events
 
-- Artwork repository: 7 teszt (lekérdezések, mentés, törlés, keresés)
+![Events](./assets/events.png)
 
-- Artist repository: 5 teszt (lekérdezések, mentés, törlés)
+### Crashlytics
 
-##### Instrumentális tesztek (8 db):
-- Service tesztek (4 db):
+![Crashlytics](./assets/crashlytics.png)
 
-  - Műalkotások és művészek lekérése
-  - Kulcsszavas keresések API-n keresztül
+---
 
-- Database tesztek (4 db):
+# Test Units (Strategy)
 
-  - Műalkotás és művész beszúrás + törlés
-  - Flow alapú lista lekérdezések
+### Local Unit Tests (Without Android Context)
 
-#### Sikerees tesztek futtatásai
+- **Goal**: Test behavior of `ArtworkRepository`, `ArtistRepository`, `ImageRepository` without Android dependencies
+- **Tech**: JUnit4, MockK, kotlinx.coroutines.test
+- **Mocks**: API (Service) and DAO
+- **Focus**:
+  - Handling API responses
+  - Database operations (insert, delete, query)
+  - Keyword search logic
+- **Benefit**: Fast, isolated, no emulator/device required
+
+### Instrumentation Tests (With Android Context)
+
+- **Goal**: Validate integration in actual Android environment
+- **Tech**: AndroidJUnit4, Room, Retrofit, Gson
+- **Focus**:
+  - Real API calls (`ArtworkService`, `ArtistService`)
+  - Room database integration
+- **Benefit**: Ensures correct behavior within the Android system
+
+---
+
+## Test Coverage
+
+### Local Unit Tests (12 tests)
+- **ArtworkRepository**: 7 tests (queries, save, delete, search)
+- **ArtistRepository**: 5 tests (queries, save, delete)
+
+### Instrumentation Tests (8 tests)
+- **Service Tests (4)**:
+  - Fetching artworks and artists
+  - Keyword-based API searches
+- **Database Tests (4)**:
+  - Insert and delete for artworks and artists
+  - Querying lists using Flow
+
+### Successful Test Runs
 
 <img src="./assets/ServiceInstrumentedTest_SuccesfulRunning.png" width="320">
 <img src="./assets/DatabaseInstrumentedTest_SuccesfulRunning.png" width="320">
