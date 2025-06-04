@@ -25,7 +25,7 @@ Ugyanakkor nem kötelező mindegyiket kitölteni: Ha mindegyik üresen hagyja, a
 Tehát az egyszerűség kedvéért kizárólag a festményeknél el lehet menteni kedvencként, meg eltávolítani a kedvencek közül.
 (A szerzők felsorolását kihagyom az egyszerűség kedvéért, de hogyha mégis kevés ez, akkor utólag ezt adom hozzá.)
 
-Usacase, és usestory ("Festmény nézegetés")
+Usecase, és usestory ("Festmény nézegetés")
 
 <img src="./assets/BMELaborMobilUseCaseUseStory.png" width="320">
 
